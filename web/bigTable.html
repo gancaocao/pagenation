@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="/js/jquery.js"></script>
+    <script src="/js/bootstrap.js"></script>
+    <script src="/js/angular.js"></script>
+    <script src="/js/lodash.js"></script>
+    <script src="/js/ng-table.js"></script>
+    <script src="/js/quick-ng-repeat.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="/css/ng-table.css">
+
+    <style>
+        .editable-table > tbody > tr > td {
+            padding: 4px
+        }
+
+        .editable-text {
+            padding-left: 4px;
+            padding-top: 4px;
+            padding-bottom: 4px;
+            display: inline-block;
+        }
+
+        .editable-table tbody > tr > td > .controls {
+        / / width: 100 %
+        }
+
+        .editable-input {
+            padding-left: 3px;
+        }
+
+        .editable-input.input-sm {
+            height: 30px;
+            font-size: 14px;
+            padding-top: 4px;
+            padding-bottom: 4px;
+        }
+    </style>
+
+</head>
+<body ng-app="myApp">
+<div class="container-fluid">
+    <div class="row" style="height: 500px">
+        <div style="height: 100px">
+            <div class="col-md-6" ng-controller="demoController as demo">
+                <h3>ngTable directive<input type="button" value="click" ng-click="click()"></h3>
+
+                <div class="brn-group pull-left">
+                <div>
+                    <input type="number" class="form-control" id="page" min="1" placeholder="page #"
+                           ng-model="demo.nextPageNum" ng-change="demo.changePage(demo.nextPageNum)">
+                </div>
+                </div>
+                <div class="brn-group pull-right">
+
+
+                    <button class="btn btn-default" ng-if="demo.isEditing" ng-click="demo.cancelChanges()">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                    <button class="btn btn-primary" ng-if="!demo.isEditing" ng-click="demo.isEditing = true">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                    </button>
+                    <button class="btn btn-primary" ng-if="demo.isEditing"
+                            ng-disabled="!demo.hasChanges() || demo.tableTracker.$invalid"
+                            ng-click="demo.saveChanges()">
+                        <span class="glyphicon glyphicon-ok"></span>
+                    </button>
+                    <button class="btn btn-default" ng-click="demo.add()">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                </div>
+                <table ng-table="tableParams" class="table table-bordered table-hover table-condensed editable-table"
+                       ng-form="demo.tableForm" disable-filter="demo.isAdding" demo-tracked-table="demo.tableTracker">
+                    <colgroup>
+                        <col width="58%"/>
+                        <col width="12%"/>
+                        <col width="13%"/>
+                        <col width="12%"/>
+                        <col width="5%"/>
+                    </colgroup>
+                    <tr quick-ng-repeat="row in $data" ng-form="rowForm" demo-tracked-table-row="row">
+                        <td title="'Name'" filter="{name: 'text'}" sortable="'name'" ng-switch="demo.isEditing"
+                            ng-class="name.$dirty ? 'bg-warning' : ''" ng-form="name" demo-tracked-table-cell>
+                            <span ng-switch-default class="editable-text">{{row.name}}</span>
+                            <div class="controls" ng-class="name.$invalid && name.$dirty ? 'has-error' : ''"
+                                 ng-switch-when="true">
+                                <input type="text" name="name" ng-model="row.name"
+                                       class="editable-input form-control input-sm" required/>
+                            </div>
+                        </td>
+                        <td title="'Age'" filter="{age: 'number'}" sortable="'age'" ng-switch="demo.isEditing"
+                            ng-class="age.$dirty ? 'bg-warning' : ''" ng-form="age" demo-tracked-table-cell>
+                            <span ng-switch-default class="editable-text">{{row.age}}</span>
+                            <div class="controls" ng-class="age.$invalid && age.$dirty ? 'has-error' : ''"
+                                 ng-switch-when="true">
+                                <input type="number" name="age" ng-model="row.age"
+                                       class="editable-input form-control input-sm" required/>
+                            </div>
+                        </td>
+                        <td title="'Money'" filter="{money: 'number'}" sortable="'money'" ng-switch="demo.isEditing"
+                            ng-class="money.$dirty ? 'bg-warning' : ''" ng-form="money" demo-tracked-table-cell>
+                            <span ng-switch-default class="editable-text">{{row.money}}</span>
+                            <div class="controls" ng-class="money.$invalid && money.$dirty ? 'has-error' : ''"
+                                 ng-switch-when="true">
+                                <input type="number" name="money" ng-model="row.money"
+                                       class="editable-input form-control input-sm" required/>
+                            </div>
+                        </td>
+                        <td title="'是/否'" ng-switch="demo.isEditing" ng-form="sure" demo-tracked-table-cell>
+                            <span ng-switch-default class="editable-text">{{row.sure}}</span>
+                            <div class="controls" ng-switch-when="true">
+                                <select style="height:30px;padding:0px 0px" class="form-control" ng-model="row.sure">
+                                    <option>是</option>
+                                    <option>否</option>
+                                </select>
+                            </div>
+
+                        </td>
+                        <td>
+                            <button class="btn btn-danger btn-sm" ng-click="demo.del(row)"
+                                    ng-disabled="!demo.isEditing">
+                                <span class="glyphicon glyphicon-trash"></span></button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
