@@ -4,16 +4,20 @@ angular.module("myApp", ["ngTable","QuickList"]);
     "use strict";
 
     angular.module("myApp").controller("demoController", demoController);
-    demoController.$inject = ["$scope","NgTableParams","$http"];
+    demoController.$inject = ["$scope","NgTableParams","$http","ngTableEventsChannel"];
 
-    function demoController($scope,NgTableParams,$http) {
+    function demoController($scope,NgTableParams,$http,ngTableEventsChannel) {
         var self = this;
         $scope.originalData=[];
+        self.allTableEvents = [];
         $http.get('data/test.json').success(function(data){
 
             $scope.originalData = data;
             self.ordata = angular.copy($scope.originalData);
             $scope.tableParams = createUsingFullOptions();
+            $scope.isLoading = $scope.tableParams.settings().$loading;
+            var logPagesChangedEvent = _.partial(logEvent, self.allTableEvents, "pagesChanged");
+            ngTableEventsChannel.onPagesChanged(logPagesChangedEvent, $scope);
         });
 
 

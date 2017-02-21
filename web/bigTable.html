@@ -39,6 +39,17 @@
             padding-top: 4px;
             padding-bottom: 4px;
         }
+        [tbody]
+        {
+            max-height:350px;
+            overflow:auto;
+        }
+        .ng-scope.ng-isolate-scope{
+            position:absolute;
+            bottom:-60px;
+            left:15px;
+           width:93%;
+        }
     </style>
 
 </head>
@@ -46,9 +57,11 @@
 <div class="container-fluid">
     <div class="row" style="height: 500px">
         <div style="height: 100px">
-            <div class="col-md-6" ng-controller="demoController as demo">
-                <h3>ngTable directive<input type="button" value="click" ng-click="click()"></h3>
 
+            <div class="col-md-6" ng-controller="demoController as demo">
+
+                <h3>ngTable directive<input type="button" value="click" ng-click="click()"></h3>
+                <div style="height: 300px;overflow: auto;">
                 <div class="brn-group pull-left">
                 <div>
                     <input type="number" class="form-control" id="page" min="1" placeholder="page #"
@@ -73,15 +86,17 @@
                         <span class="glyphicon glyphicon-plus"></span>
                     </button>
                 </div>
+
                 <table ng-table="tableParams" class="table table-bordered table-hover table-condensed editable-table"
                        ng-form="demo.tableForm" disable-filter="demo.isAdding" demo-tracked-table="demo.tableTracker">
-                    <colgroup>
+<!--                    <colgroup>
                         <col width="58%"/>
                         <col width="12%"/>
                         <col width="13%"/>
                         <col width="12%"/>
                         <col width="5%"/>
-                    </colgroup>
+                    </colgroup>-->
+
                     <tr quick-ng-repeat="row in $data" ng-form="rowForm" demo-tracked-table-row="row">
                         <td title="'Name'" filter="{name: 'text'}" sortable="'name'" ng-switch="demo.isEditing"
                             ng-class="name.$dirty ? 'bg-warning' : ''" ng-form="name" demo-tracked-table-cell>
@@ -126,7 +141,9 @@
                                 <span class="glyphicon glyphicon-trash"></span></button>
                         </td>
                     </tr>
+
                 </table>
+                </div>
             </div>
         </div>
     </div>
